@@ -26,10 +26,19 @@ In case the remote attestation procedure is successful, the kernel's bitstream i
 
 The provided scripts run with a AMD ALVEO U280 FPGA card with ```xilinx_u280_xdma_201920_3``` shell. Vitis/Vivado 2021.1 version was used for building the AES kernel as well as the accelerator kernel. 
 
-Prior to running the remote attestation script, the user must build the AES encryption module that is required from the remote attestation service. Specifically, it is used for encrypting the remote attestation report, containing the accelerator kernel hash. In order to build the AES encryption module, the user follows the RTL kernel to IP flow:
+Prior to running the remote attestation script, the user must build the AES encryption module that is required from the remote attestation service. Specifically, it is used for encrypting the remote attestation report, containing the accelerator kernel hash. In order to build the AES encryption module, the user follows the RTL kernel to IP flow, as it is described by AMD. First, the user has to create the Vivado project and add the corresponding sources. Navigate to ```edge_server/aes_kernel/krnl_aes``` and run the following:
 ```bash
+make gen_ip
 ```
-Then, the user using Python bindings, it creates a library for interfacing with the C++ script from the attestation script that is written in python.
+Then, package the IP and generate the Vitis kernel file:
+```bash
+make pack_kernel
+```
+Then build the hardware module for the AES kernel:
+```bash
+make build_hw
+```
+Lastly, the user based on Python bindings, it creates a library for interfacing with the C++ script from the attestation script that is written in python.
 ```bash
 make build_sw
 ```
