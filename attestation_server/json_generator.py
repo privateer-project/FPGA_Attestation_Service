@@ -1,7 +1,5 @@
 # ---------------------------------------------------
 # Auxiliary file to generate the json structures for the attestation reports
-#
-# Ilias Papalamprou
 # ---------------------------------------------------
 import json
 
@@ -10,28 +8,89 @@ def generate_att_report_json(
     edge_server_id, fpga_id, 
     att_service_claim, att_service_timestamp, att_service_appraisal,
     kernel_claim, kernel_type, kernel_timestamp, kernel_appraisal,
+    puf_claim, puf_timestamp, puf_appraisal, puf_value
 ):
+    # data = {
+    #     "EdgeAcceleratorReports": [
+    #     {
+    #             "EdgeServerID" :        edge_server_id,         # "Edge-Server-1"
+    #             "FPGAID" :              fpga_id,                # "FPGA-1"
+    #             "attestationReport": [
+    #                 {
+    #                     "claim":        att_service_claim,      # "edge_accelerator_att_service",
+    #                     "timestamp":    att_service_timestamp,  # timestamp1,
+    #                     "appraisal":    att_service_appraisal,  # 1
+    #                 },
+    #                 {
+    #                     "claim":        kernel_claim,           # "edge_accelerator_kernel",
+    #                     "kernel_type" : kernel_type,            # 0,
+    #                     "timestamp":    kernel_timestamp,       # timestamp2,
+    #                     "appraisal":    kernel_appraisal       # 0
+    #                 }
+    #             ]
+    #         }
+    #     ]
+    # }
+
+    # -------------------------------------------------------------------- #
+    # -------------------------------------------------------------------- #
+    # -------------------------------------------------------------------- #
+    # -------------------------------------------------------------------- #
+    # data = [
+    #     {
+    #         "EdgeServerID" :        edge_server_id,         # "Edge-Server-1"
+    #         "FPGAID" :              fpga_id,                # "FPGA-1"
+    #         "attestationReport": [
+    #             {
+    #                 "claim":        att_service_claim,      # "edge_accelerator_att_service",
+    #                 "timestamp":    att_service_timestamp,  # timestamp1,
+    #                 "appraisal":    att_service_appraisal,  # 1
+    #             },
+    #             {
+    #                 "claim":        kernel_claim,           # "edge_accelerator_kernel",
+    #                 "kernel_type" : kernel_type,            # 0,
+    #                 "timestamp":    kernel_timestamp,       # timestamp2,
+    #                 "appraisal":    kernel_appraisal       # 0
+    #             }
+    #         ]
+    #     }
+    # ]
     
+    # ------------------------------------------------------------------------ #
+    # ------------------------------------------------------------------------ #
     data = [
         {
-            "EdgeServerID" :        edge_server_id,         # "Edge-Server-1"
-            "FPGAID" :              fpga_id,                # "FPGA-1"
+            "EdgeServerID" :        edge_server_id,
+            "FPGAID" :              fpga_id,
             "attestationReport": [
                 {
-                    "claim":        att_service_claim,      # "edge_accelerator_att_service",
-                    "timestamp":    att_service_timestamp,  # timestamp1,
-                    "appraisal":    att_service_appraisal,  # 1
+                    "claim":        att_service_claim,
+                    "timestamp":    att_service_timestamp,  
+                    "appraisal":    att_service_appraisal,
                 },
                 {
-                    "claim":        kernel_claim,           # "edge_accelerator_kernel",
-                    "kernel_type" : kernel_type,            # 0,
-                    "timestamp":    kernel_timestamp,       # timestamp2,
-                    "appraisal":    kernel_appraisal       # 0
+                    "claim":        kernel_claim,
+                    "kernel_type" : kernel_type,            
+                    "timestamp":    kernel_timestamp,       
+                    "appraisal":    kernel_appraisal
+                },
+                {
+                    "claim":        puf_claim,            
+                    "timestamp":    puf_timestamp,       
+                    "appraisal":    puf_appraisal,
+                    "puf":          puf_value
                 }
             ]
         }
     ]
+    # ------------------------------------------------------------------------ #
+    # ------------------------------------------------------------------------ #
+    
+    
 
+    # Convert the dictionary to a JSON string
+    # json_data = json.dumps(data, indent=2)
+    # json_data = json.dumps(data) # <===
     json_data = data
     
     return json_data
@@ -43,12 +102,23 @@ def generate_att_server_evidence_json(
     att_evidence_timestamp, att_evidence_nonce, att_evidence_signature_type, att_evidence_signature, att_evidence_keyref
 ):
     # Calculate the input JSON structure checksum to include it in the evidence
+
+    # data = {
+    #     "AttestationServerEvidence": {  # Attestation Server / Verification Service
+    #         "timestamp" :               att_evidence_timestamp,         # stigmh pou stelnei to json
+    #         "nonce" :                   att_evidence_nonce,             # auto pou paragei o verification server
+    #         "signatureAlgorithmType":   att_evidence_signature_type,    # ECDSA-SHA256
+    #         "signature" :               att_evidence_signature,         # Sign(Nonce + attestation_report)
+    #         "keyRef"    :               att_evidence_keyref             # "ecdsa_public_key_71"  antallagh kleidiou me SCB/secure oracle
+    #     }
+    # }
+
     data = {
-        "timestamp" :               att_evidence_timestamp,         
-        "nonce" :                   att_evidence_nonce,             
-        "signatureAlgorithmType":   att_evidence_signature_type,    
-        "signature" :               att_evidence_signature,         
-        "keyRef"    :               att_evidence_keyref             
+        "timestamp" :               att_evidence_timestamp,         # stigmh pou stelnei to json
+        "nonce" :                   att_evidence_nonce,             # auto pou paragei o verification server
+        "signatureAlgorithmType":   att_evidence_signature_type,    # ECDSA-SHA256
+        "signature" :               att_evidence_signature,         # Sign(Nonce + attestation_report)
+        "keyRef"    :               att_evidence_keyref             # "ecdsa_public_key_71"  antallagh kleidiou me SCB/secure oracle
     }
 
     # Convert the dictionary to a JSON string

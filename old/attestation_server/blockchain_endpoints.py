@@ -1,5 +1,7 @@
 # ---------------------------------------------------
 # Communication with the Blockchain
+# 
+# Ilias Papalamprou
 # ---------------------------------------------------
 import requests
 import json
@@ -39,8 +41,7 @@ def push_data(json_structure, url, jwt_token):
 		'Authorization': f'Bearer {jwt_token}'
 	}
 
-	# print("post")
-	
+
 	# Push the data to the Blockchain
 	response = requests.request(
 		"POST", 
@@ -48,11 +49,7 @@ def push_data(json_structure, url, jwt_token):
 		headers=header,
 		data=json_structure,
 		timeout=10
-    )
-	# print("debug" + response.status_code)
-	# print(response.text)
-
-	# print(response.text)
+    	)
 
 
 # ---------------------------------------------------
